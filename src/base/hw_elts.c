@@ -210,7 +210,7 @@ alu(uint64_t alu_vala, uint64_t alu_valb, uint8_t alu_valhw, alu_op_t ALUop, boo
                 *nzcv = PACK_CC(GET_NF(*nzcv), 0, GET_CF(*nzcv), GET_VF(*nzcv));
             }
             uint64_t temp_complement = alu_vala + ~alu_valb + 1;
-            if (temp_complement < alu_vala || temp_complement < (~alu_valb + 1))
+            if (temp_complement < alu_vala || alu_valb == 0 || temp_complement < (~alu_valb + 1))
             {
                 *nzcv = PACK_CC(GET_NF(*nzcv), GET_ZF(*nzcv), 1, GET_VF(*nzcv));
             }

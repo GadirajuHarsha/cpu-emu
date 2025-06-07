@@ -396,12 +396,17 @@ comb_logic_t decode_instr(d_instr_impl_t *in, x_instr_impl_t *out)
 	d_ctl_sigs_t D_sigs = {0};
 	generate_DXMW_control(in->op, &D_sigs, &out->X_sigs, &out->M_sigs, &out->W_sigs);
 
-	extract_regs(in->insnbits, in->op, &out->val_a, &out->val_b, &out->dst);
+	uint8_t src1, src2 = 0;
+
+	extract_regs(in->insnbits, in->op, &src1, &src2, &out->dst);
 	if (D_sigs.src2_sel)
 	{
-		out->val_b = out->dst;
+		src2 = out->dst;
 	}
-	regfile(out->val_a, out->val_b, W_out->dst, W_wval, W_out->W_sigs.w_enable, &out->val_a, &out->val_b);
+	regfile(src1, src2, W_out->dst, W_wval, W_out->W_sigs.w_enable, &out->val_a, &out->val_b);
+	forward_reg(src1, src2, X_out->dst, W_in->dst, W_out->dst, M_in->val_ex, W_in->val_ex, W_in->val_mem, W_wval, W_wval,
+	W_in->W_sigs.wval_sel, W_out->W_sigs.wval_sel, M_in->W_sigs.w_enable, W_in->W_sigs.w_enable, W_out->W_sigs.w_enable,
+	&out->val_a, &out->val_b);
 	extract_immval(in->insnbits, in->op, &out->val_imm);
 	decide_alu_op(in->op, &out->ALU_op);
 	if (in->op == OP_B_COND)

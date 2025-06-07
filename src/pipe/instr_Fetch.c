@@ -181,13 +181,17 @@ comb_logic_t fetch_instr(f_instr_impl_t *in, d_instr_impl_t *out)
   {
     // Student TODO
     imem(current_PC, &out->insnbits, &imem_err);
-    out->op = itable[bitfield_u32(out->insnbits, 21, 11)];
-    fix_instr_aliases(out->insnbits, &out->op);
-    predict_PC(current_PC, out->insnbits, out->op, &guest.proc->PC, &out->multipurpose_val.seq_succ_PC);
-    
-    if (out->op == OP_ADRP)
-    {
-      out->multipurpose_val.adrp_val = current_PC & 0xFFFFFFFFFFFFF000;
+    if (!imem_err) {
+      out->op = itable[bitfield_u32(out->insnbits, 21, 11)];
+      fix_instr_aliases(out->insnbits, &out->op);
+      predict_PC(current_PC, out->insnbits, out->op, &guest.proc->PC, &out->multipurpose_val.seq_succ_PC);
+      if (out->op == OP_ADRP)
+      {
+        out->multipurpose_val.adrp_val = current_PC & 0xFFFFFFFFFFFFF000;
+      }
+    }
+    else {
+      guest.proc->PC = current_PC + 4;
     }
   }
 
