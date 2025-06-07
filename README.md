@@ -16,8 +16,8 @@ Beyond the basic pipeline structure, the emulator implements critical features n
 
 - Hazard Control: To ensure correct program execution, the emulator features a sophisticated hazard control unit. It correctly detects and mitigates all three types of hazards:
 
-        - Data Hazards: Resolved through a comprehensive forwarding unit (or bypassing) that sends results from the Execute, Memory, and Write-back stages directly to the Decode stage's inputs, preventing unnecessary stalls. When forwarding is not possible, the pipeline is stalled correctly.
-        - Control Hazards: Detected upon decoding a branch instruction. The pipeline is flushed (or "bubbled") to discard incorrectly fetched instructions and ensure the program counter is updated to the correct branch target.
+  - Data Hazards: Resolved through a comprehensive forwarding unit (or bypassing) that sends results from the Execute, Memory, and Write-back stages directly to the Decode stage's inputs, preventing unnecessary stalls. When forwarding is not possible, the pipeline is stalled correctly.
+  - Control Hazards: Detected upon decoding a branch instruction. The pipeline is flushed (or "bubbled") to discard incorrectly fetched instructions and ensure the program counter is updated to the correct branch target.
         
 - Configurable Cache Simulation: The emulator includes a highly detailed simulation of a set-associative L1 data cache. This system moves beyond a simple, ideal memory model to accurately simulate real-world memory latency. When a memory operation occurs, the cache is checked first. A cache hit results in no pipeline delay, while a cache miss triggers a stall for a configurable number of cycles, simulating the penalty of fetching data from main memory. The cache's geometry (associativity, line size, and total capacity) and miss penalty are all configurable parameters of the simulation.
 
